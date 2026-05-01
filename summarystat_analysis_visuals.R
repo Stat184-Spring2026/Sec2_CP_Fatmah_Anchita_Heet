@@ -126,8 +126,8 @@ kable(spore_table, digits = 2,
 
 # DESIGN STANDARDS:
 mushroom_colors <- c(
-  "edible" = "#9FE3B5",
-  "poisonous" = "#9C6ADE"
+  edible = "#2c7a4b",
+  poisonous = "#8b3f8f"
 )
 
 mushroom_theme <- theme_minimal() +
@@ -175,7 +175,7 @@ ggplot(data_clean, aes(x = `gill-color`, fill = classes)) +
 # Visual 3: Odor vs Class (HEATMAP)
 ggplot(data_clean, aes(x = classes, y = odor)) +
   geom_bin2d() + 
-  scale_fill_gradient(low = "#9FE3B5", high = "#9C6ADE") + 
+  scale_fill_gradient(low = "#2c7a4b", high = "#8b3f8f") + 
   mushroom_theme +
   labs(
     title = "Heatmap: Odor Frequency by Class",
@@ -272,7 +272,7 @@ top_poisonous_patterns <- data_clean |>
   mutate(pattern = paste(odor, `gill-color`, `spore-print-color`, sep = " / "))
 
 ggplot(top_poisonous_patterns, aes(x = n, y = reorder(pattern, n), size = n)) +
-  geom_point(color = "#9C6ADE", alpha = 0.7) +
+  geom_point(color = "#8b3f8f", alpha = 0.7) +
   mushroom_theme +
   labs(
     title = "Top Poisonous Mushroom Feature Combinations",
