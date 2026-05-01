@@ -1,0 +1,607 @@
+library(dplyr)
+
+data <- read.table("agaricus-lepiota.data", header = FALSE, sep = ",")
+
+data_with_columns <- data |>
+  rename(
+    `classes` = V1,
+    `cap-shape` = V2,
+    `cap-surface` = V3,
+    `cap-color` = V4,
+    `bruises?` = V5,
+    `odor` = V6,
+    `gill-attachment` = V7,
+    `gill-spacing` = V8,
+    `gill-size` = V9,
+    `gill-color` = V10,
+    `stalk-shape` = V11,
+    `stalk-root` = V12,
+    `stalk-surface-above-ring` = V13,
+    `stalk-surface-below-ring` = V14,
+    `stalk-color-above-ring` = V15,
+    `stalk-color-below-ring` = V16,
+    `veil-type` = V17,
+    `veil-color` = V18,
+    `ring-number` = V19,
+    `ring-type` = V20,
+    `spore-print-color` = V21,
+    `population` = V22,
+    `habitat` = V23
+  )
+
+data_clean <- data_with_columns |>
+  mutate(
+    classes = case_when(
+      classes == "e" ~ "edible",
+      classes == "p" ~ "poisonous",
+      TRUE ~ classes
+    ),
+    
+    `cap-shape` = case_when(
+      `cap-shape` == "b" ~ "bell",
+      `cap-shape` == "c" ~ "conical",
+      `cap-shape` == "x" ~ "convex",
+      `cap-shape` == "f" ~ "flat",
+      `cap-shape` == "k" ~ "knobbed",
+      `cap-shape` == "s" ~ "sunken",
+      TRUE ~ `cap-shape`
+    ),
+    
+    `cap-surface` = case_when(
+      `cap-surface` == "f" ~ "fibrous",
+      `cap-surface` == "g" ~ "grooves",
+      `cap-surface` == "y" ~ "scaly",
+      `cap-surface` == "s" ~ "smooth",
+      TRUE ~ `cap-surface`
+    ),
+    
+    `cap-color` = case_when(
+      `cap-color` == "n" ~ "brown",
+      `cap-color` == "b" ~ "buff",
+      `cap-color` == "c" ~ "cinnamon",
+      `cap-color` == "g" ~ "gray",
+      `cap-color` == "r" ~ "green",
+      `cap-color` == "p" ~ "pink",
+      `cap-color` == "u" ~ "purple",
+      `cap-color` == "e" ~ "red",
+      `cap-color` == "w" ~ "white",
+      `cap-color` == "y" ~ "yellow",
+      TRUE ~ `cap-color`
+    ),
+    
+    `bruises?` = case_when(
+      `bruises?` == "t" ~ "bruises",
+      `bruises?` == "f" ~ "no",
+      TRUE ~ `bruises?`
+    ),
+    
+    odor = case_when(
+      odor == "a" ~ "almond",
+      odor == "l" ~ "anise",
+      odor == "c" ~ "creosote",
+      odor == "y" ~ "fishy",
+      odor == "f" ~ "foul",
+      odor == "m" ~ "musty",
+      odor == "n" ~ "none",
+      odor == "p" ~ "pungent",
+      odor == "s" ~ "spicy",
+      TRUE ~ odor
+    ),
+    
+    `gill-attachment` = case_when(
+      `gill-attachment` == "a" ~ "attached",
+      `gill-attachment` == "d" ~ "descending",
+      `gill-attachment` == "f" ~ "free",
+      `gill-attachment` == "n" ~ "notched",
+      TRUE ~ `gill-attachment`
+    ),
+    
+    `gill-spacing` = case_when(
+      `gill-spacing` == "c" ~ "close",
+      `gill-spacing` == "w" ~ "crowded",
+      `gill-spacing` == "d" ~ "distant",
+      TRUE ~ `gill-spacing`
+    ),
+    
+    `gill-size` = case_when(
+      `gill-size` == "b" ~ "broad",
+      `gill-size` == "n" ~ "narrow",
+      TRUE ~ `gill-size`
+    ),
+    
+    `gill-color` = case_when(
+      `gill-color` == "k" ~ "black",
+      `gill-color` == "n" ~ "brown",
+      `gill-color` == "b" ~ "buff",
+      `gill-color` == "h" ~ "chocolate",
+      `gill-color` == "g" ~ "gray",
+      `gill-color` == "r" ~ "green",
+      `gill-color` == "o" ~ "orange",
+      `gill-color` == "p" ~ "pink",
+      `gill-color` == "u" ~ "purple",
+      `gill-color` == "e" ~ "red",
+      `gill-color` == "w" ~ "white",
+      `gill-color` == "y" ~ "yellow",
+      TRUE ~ `gill-color`
+    ),
+    
+    `stalk-shape` = case_when(
+      `stalk-shape` == "e" ~ "enlarging",
+      `stalk-shape` == "t" ~ "tapering",
+      TRUE ~ `stalk-shape`
+    ),
+    
+    `stalk-root` = case_when(
+      `stalk-root` == "b" ~ "bulbous",
+      `stalk-root` == "c" ~ "club",
+      `stalk-root` == "u" ~ "cup",
+      `stalk-root` == "e" ~ "equal",
+      `stalk-root` == "z" ~ "rhizomorphs",
+      `stalk-root` == "r" ~ "rooted",
+      `stalk-root` == "?" ~ "missing",
+      TRUE ~ `stalk-root`
+    ),
+    
+    `stalk-surface-above-ring` = case_when(
+      `stalk-surface-above-ring` == "f" ~ "fibrous",
+      `stalk-surface-above-ring` == "y" ~ "scaly",
+      `stalk-surface-above-ring` == "k" ~ "silky",
+      `stalk-surface-above-ring` == "s" ~ "smooth",
+      TRUE ~ `stalk-surface-above-ring`
+    ),
+    
+    `stalk-surface-below-ring` = case_when(
+      `stalk-surface-below-ring` == "f" ~ "fibrous",
+      `stalk-surface-below-ring` == "y" ~ "scaly",
+      `stalk-surface-below-ring` == "k" ~ "silky",
+      `stalk-surface-below-ring` == "s" ~ "smooth",
+      TRUE ~ `stalk-surface-below-ring`
+    ),
+    
+    `stalk-color-above-ring` = case_when(
+      `stalk-color-above-ring` == "n" ~ "brown",
+      `stalk-color-above-ring` == "b" ~ "buff",
+      `stalk-color-above-ring` == "c" ~ "cinnamon",
+      `stalk-color-above-ring` == "g" ~ "gray",
+      `stalk-color-above-ring` == "o" ~ "orange",
+      `stalk-color-above-ring` == "p" ~ "pink",
+      `stalk-color-above-ring` == "e" ~ "red",
+      `stalk-color-above-ring` == "w" ~ "white",
+      `stalk-color-above-ring` == "y" ~ "yellow",
+      TRUE ~ `stalk-color-above-ring`
+    ),
+    
+    `stalk-color-below-ring` = case_when(
+      `stalk-color-below-ring` == "n" ~ "brown",
+      `stalk-color-below-ring` == "b" ~ "buff",
+      `stalk-color-below-ring` == "c" ~ "cinnamon",
+      `stalk-color-below-ring` == "g" ~ "gray",
+      `stalk-color-below-ring` == "o" ~ "orange",
+      `stalk-color-below-ring` == "p" ~ "pink",
+      `stalk-color-below-ring` == "e" ~ "red",
+      `stalk-color-below-ring` == "w" ~ "white",
+      `stalk-color-below-ring` == "y" ~ "yellow",
+      TRUE ~ `stalk-color-below-ring`
+    ),
+    
+    `veil-type` = case_when(
+      `veil-type` == "p" ~ "partial",
+      `veil-type` == "u" ~ "universal",
+      TRUE ~ `veil-type`
+    ),
+    
+    `veil-color` = case_when(
+      `veil-color` == "n" ~ "brown",
+      `veil-color` == "o" ~ "orange",
+      `veil-color` == "w" ~ "white",
+      `veil-color` == "y" ~ "yellow",
+      TRUE ~ `veil-color`
+    ),
+    
+    `ring-number` = case_when(
+      `ring-number` == "n" ~ "none",
+      `ring-number` == "o" ~ "one",
+      `ring-number` == "t" ~ "two",
+      TRUE ~ `ring-number`
+    ),
+    
+    `ring-type` = case_when(
+      `ring-type` == "c" ~ "cobwebby",
+      `ring-type` == "e" ~ "evanescent",
+      `ring-type` == "f" ~ "flaring",
+      `ring-type` == "l" ~ "large",
+      `ring-type` == "n" ~ "none",
+      `ring-type` == "p" ~ "pendant",
+      `ring-type` == "s" ~ "sheathing",
+      `ring-type` == "z" ~ "zone",
+      TRUE ~ `ring-type`
+    ),
+    
+    `spore-print-color` = case_when(
+      `spore-print-color` == "k" ~ "black",
+      `spore-print-color` == "n" ~ "brown",
+      `spore-print-color` == "b" ~ "buff",
+      `spore-print-color` == "h" ~ "chocolate",
+      `spore-print-color` == "r" ~ "green",
+      `spore-print-color` == "o" ~ "orange",
+      `spore-print-color` == "u" ~ "purple",
+      `spore-print-color` == "w" ~ "white",
+      `spore-print-color` == "y" ~ "yellow",
+      TRUE ~ `spore-print-color`
+    ),
+    
+    population = case_when(
+      population == "a" ~ "abundant",
+      population == "c" ~ "clustered",
+      population == "n" ~ "numerous",
+      population == "s" ~ "scattered",
+      population == "v" ~ "several",
+      population == "y" ~ "solitary",
+      TRUE ~ population
+    ),
+    
+    habitat = case_when(
+      habitat == "g" ~ "grasses",
+      habitat == "l" ~ "leaves",
+      habitat == "m" ~ "meadows",
+      habitat == "p" ~ "paths",
+      habitat == "u" ~ "urban",
+      habitat == "w" ~ "waste",
+      habitat == "d" ~ "woods",
+      TRUE ~ habitat
+    )
+  )
+
+# MEMBER B: Summary Statistics, Analysis, and Visualizations
+# Project: Mushroom Exploratory Data Analysis
+# Code Style: Tidyverse Style Guide
+# Primary Author: Member B
+# Reviewer: Member C
+
+# -----------------------------------------------------------------------------
+# 1. Load Required Libraries
+# -----------------------------------------------------------------------------
+
+library(tidyverse)
+library(scales)
+library(knitr)
+library(forcats)
+
+
+# -----------------------------------------------------------------------------
+# 2. Design Standards
+# -----------------------------------------------------------------------------
+
+mushroom_colors <- c(
+  "edible" = "#9FE3B5",     # Green represents edible/safe mushrooms.
+  "poisonous" = "#9C6ADE"  # Purple represents poisonous mushrooms.
+)
+
+mushroom_theme <- theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = "bold", size = 15),
+    plot.subtitle = element_text(size = 11),
+    axis.title = element_text(size = 11),
+    legend.title = element_text(face = "bold"),
+    legend.position = "right",
+    panel.grid.minor = element_blank()
+  )
+
+# -----------------------------------------------------------------------------
+# 3. Summary Statistics and Patterns
+# -----------------------------------------------------------------------------
+
+# Overall class distribution
+class_summary <- data_clean |>
+  count(classes) |>
+  mutate(proportion = n / sum(n))
+
+# Odor vs. class
+odor_summary <- data_clean |>
+  count(odor, classes) |>
+  group_by(odor) |>
+  mutate(proportion = n / sum(n)) |>
+  ungroup()
+
+# Gill color vs. class
+gill_color_summary <- data_clean |>
+  count(`gill-color`, classes) |>
+  group_by(`gill-color`) |>
+  mutate(proportion = n / sum(n)) |>
+  ungroup()
+
+# Bruises vs. class
+bruises_summary <- data_clean |>
+  count(`bruises?`, classes) |>
+  group_by(`bruises?`) |>
+  mutate(proportion = n / sum(n)) |>
+  ungroup()
+
+# Spore print color vs. class
+spore_summary <- data_clean |>
+  count(`spore-print-color`, classes) |>
+  group_by(`spore-print-color`) |>
+  mutate(proportion = n / sum(n)) |>
+  ungroup()
+
+# Print summaries for quick review
+print(class_summary)
+print(odor_summary)
+print(gill_color_summary)
+print(bruises_summary)
+print(spore_summary)
+
+# -----------------------------------------------------------------------------
+# 4. Professional Tables
+# -----------------------------------------------------------------------------
+
+# Table 1: Overall Distribution
+class_table <- data_clean |>
+  count(classes) |>
+  mutate(Percentage = n / sum(n) * 100) |>
+  rename(Classification = classes, Count = n)
+
+kable(
+  class_table,
+  digits = 1,
+  caption = "Table 1: Distribution of Edible vs. Poisonous Mushrooms"
+)
+
+# Table 2: Odor Toxicity
+odor_table <- data_clean |>
+  count(odor, classes) |>
+  group_by(odor) |>
+  mutate(Toxicity_Rate = n / sum(n)) |>
+  ungroup() |>
+  filter(classes == "poisonous") |>
+  select(
+    Odor = odor,
+    `Poisonous Count` = n,
+    `Toxicity Rate` = Toxicity_Rate
+  ) |>
+  arrange(desc(`Toxicity Rate`))
+
+kable(
+  odor_table,
+  digits = 2,
+  caption = "Table 2: Mushroom Toxicity Based on Odor"
+)
+
+# Table 3: Gill Color Toxicity
+
+gill_table <- data_clean |>
+  count(`gill-color`, classes) |>
+  group_by(`gill-color`) |>
+  mutate(Rate = n / sum(n)) |>
+  ungroup() |>
+  filter(classes == "poisonous") |>
+  select(
+    `Gill Color` = `gill-color`,
+    `Poisonous Count` = n,
+    `Toxicity Rate` = Rate
+  ) |>
+  arrange(desc(`Toxicity Rate`))
+
+kable(
+  gill_table,
+  digits = 2,
+  caption = "Table 3: Toxicity Rate by Gill Color"
+)
+
+# Table 4: Bruising Toxicity
+bruise_table <- data_clean |>
+  count(`bruises?`, classes) |>
+  group_by(`bruises?`) |>
+  mutate(Rate = n / sum(n)) |>
+  ungroup() |>
+  filter(classes == "poisonous") |>
+  select(
+    Bruises = `bruises?`,
+    `Poisonous Count` = n,
+    `Toxicity Rate` = Rate
+  )
+
+kable(
+  bruise_table,
+  digits = 2,
+  caption = "Table 4: Probability of Toxicity Based on Bruising"
+)
+
+# Table 5: Spore Print Color Toxicity
+spore_table <- data_clean |>
+  count(`spore-print-color`, classes) |>
+  group_by(`spore-print-color`) |>
+  mutate(Rate = n / sum(n)) |>
+  ungroup() |>
+  filter(classes == "poisonous") |>
+  select(
+    `Spore Print Color` = `spore-print-color`,
+    `Poisonous Count` = n,
+    `Toxicity Rate` = Rate
+  ) |>
+  arrange(desc(`Toxicity Rate`))
+
+kable(
+  spore_table,
+  digits = 2,
+  caption = "Table 5: Toxicity Rate by Spore Print Color"
+)
+
+# -----------------------------------------------------------------------------
+# 5. Core Visualizations
+# -----------------------------------------------------------------------------
+
+# Visual 1: Odor Analysis, Proportion Bar Chart
+# Insight: Foul and pungent odors appear strongly associated with toxicity.
+ggplot(data_clean, aes(y = odor, fill = classes)) +
+  geom_bar(position = "fill") +
+  scale_fill_manual(values = mushroom_colors) +
+  scale_x_continuous(labels = percent) +
+  mushroom_theme +
+  labs(
+    title = "Mushroom Edibility by Odor",
+    subtitle = "Foul and pungent odors are strong indicators of toxicity",
+    x = "Proportion of Samples",
+    y = "Odor Type",
+    fill = "Class"
+  )
+
+# Visual 2: Gill Color, Grouped Bar Chart
+# Insight: Some gill colors appear more often in poisonous mushrooms.
+ggplot(data_clean, aes(x = `gill-color`, fill = classes)) +
+  geom_bar(position = "dodge") +
+  scale_fill_manual(values = mushroom_colors) +
+  mushroom_theme +
+  labs(
+    title = "Edibility Patterns in Gill Color",
+    subtitle = "Certain gill colors show higher association with toxicity",
+    x = "Gill Color",
+    y = "Total Count",
+    fill = "Class"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Visual 3: Odor vs. Class, Categorical Heatmap
+# Insight: Tile intensity shows where odor-class combinations are concentrated.
+odor_heatmap <- data_clean |>
+  count(classes, odor)
+
+ggplot(odor_heatmap, aes(x = classes, y = odor, fill = n)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient(low = "#9FE3B5", high = "#9C6ADE") +
+  mushroom_theme +
+  labs(
+    title = "Heatmap: Odor Frequency by Class",
+    subtitle = "Intensity shows where most samples are concentrated",
+    x = "Classification",
+    y = "Odor Type",
+    fill = "Count"
+  )
+
+# Visual 4: Spore Print Color, Dot Plot
+# Insight: Dot position shows differences in spore print color counts.
+ggplot(
+  data_clean |> count(`spore-print-color`, classes),
+  aes(x = n, y = `spore-print-color`, color = classes)
+) +
+  geom_point(size = 3) +
+  scale_color_manual(values = mushroom_colors) +
+  mushroom_theme +
+  labs(
+    title = "Distribution of Mushrooms by Spore Print Color",
+    subtitle = "Dot position shows count distribution",
+    x = "Count",
+    y = "Spore Print Color",
+    color = "Class"
+  )
+
+# -----------------------------------------------------------------------------
+# 6. Additional Visualizations
+# -----------------------------------------------------------------------------
+
+# Visual 5: Dot Plot, Gill Color Counts by Class
+# Insight: Compares edible and poisonous counts without using bars.
+gill_counts <- data_clean |>
+  count(`gill-color`, classes)
+
+ggplot(
+  gill_counts,
+  aes(x = n, y = fct_reorder(`gill-color`, n), color = classes)
+) +
+  geom_point(size = 4) +
+  scale_color_manual(values = mushroom_colors) +
+  mushroom_theme +
+  labs(
+    title = "Gill Color Distribution by Class",
+    subtitle = "Dot position shows how common each gill color is by class",
+    x = "Count",
+    y = "Gill Color",
+    color = "Class"
+  )
+
+# Visual 6: Bubble Plot, Spore Print Color and Class
+# Insight: Larger bubbles show more common class-spore color combinations.
+spore_bubble <- data_clean |>
+  count(`spore-print-color`, classes)
+
+ggplot(
+  spore_bubble,
+  aes(x = classes, y = `spore-print-color`, size = n, color = classes)
+) +
+  geom_point(alpha = 0.7) +
+  scale_color_manual(values = mushroom_colors) +
+  mushroom_theme +
+  labs(
+    title = "Spore Print Color by Mushroom Class",
+    subtitle = "Bubble size shows how many mushrooms fall into each group",
+    x = "Class",
+    y = "Spore Print Color",
+    size = "Count",
+    color = "Class"
+  )
+
+# Visual 7: Population Counts by Class
+# Insight: Shows how population categories differ between classes.
+population_counts <- data_clean |>
+  count(population, classes)
+
+ggplot(population_counts, aes(x = n, color = classes, fill = classes)) +
+  geom_density(alpha = 0.3) +
+  scale_color_manual(values = mushroom_colors) +
+  scale_fill_manual(values = mushroom_colors) +
+  mushroom_theme +
+  labs(
+    title = "Distribution of Population Counts by Class",
+    subtitle = "Density shape shows how population categories vary by class",
+    x = "Count Across Population Types",
+    y = "Density",
+    color = "Class",
+    fill = "Class"
+  )
+
+# Visual 8: Top Poisonous Feature Combinations, Bubble Plot
+# Insight: Shows the most common odor/gill/spore combinations among poisonous mushrooms.
+top_poisonous_patterns <- data_clean |>
+  filter(classes == "poisonous") |>
+  count(odor, `gill-color`, `spore-print-color`) |>
+  arrange(desc(n)) |>
+  slice_head(n = 10) |>
+  mutate(pattern = paste(odor, `gill-color`, `spore-print-color`, sep = " / "))
+
+ggplot(top_poisonous_patterns, aes(x = n, y = reorder(pattern, n), size = n)) +
+  geom_point(color = "#9C6ADE", alpha = 0.7) +
+  mushroom_theme +
+  labs(
+    title = "Top Poisonous Mushroom Feature Combinations",
+    subtitle = "Larger bubbles show the most common poisonous patterns",
+    x = "Number of Poisonous Mushrooms",
+    y = "Feature Combination",
+    size = "Count"
+  )
+
+# Visual 9: Faceted Dot Plot, Major Features
+# Insight: Compares several important features in one organized view.
+major_features_long <- data_clean |>
+  select(classes, odor, `gill-color`, `spore-print-color`, habitat, population, `ring-type`) |>
+  pivot_longer(
+    cols = -classes,
+    names_to = "Feature",
+    values_to = "Category"
+  ) |>
+  count(Feature, Category, classes)
+
+ggplot(
+  major_features_long,
+  aes(x = n, y = fct_reorder(Category, n), color = classes)
+) +
+  geom_point(size = 2.8) +
+  facet_wrap(~ Feature, scales = "free_y") +
+  scale_color_manual(values = mushroom_colors) +
+  mushroom_theme +
+  labs(
+    title = "Major Mushroom Features by Class",
+    subtitle = "Dot plots compare class patterns across several important features",
+    x = "Count",
+    y = "Category",
+    color = "Class"
+  )
