@@ -12,7 +12,7 @@ Using R and tools from the tidyverse ecosystem, we clean, analyze, and visualize
 
 One of the most significant findings from our analysis is that odor is the strongest predictor of mushroom toxicity. Mushrooms with foul, pungent, or fishy odors are highly associated with poisonous classes, while those with almond, anise, or no odor are more likely to be edible.
 
-![Chart](plots/Rplot.png)
+![Chart](plots/odor.jpeg)
 
 ## Data Sources and Acknowledgements
 
