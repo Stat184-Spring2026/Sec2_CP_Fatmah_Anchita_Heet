@@ -144,7 +144,7 @@ Pull requests for peer review
 
 ```
   ├── data/                          # Dataset files (raw and/or processed)
-  |── plots/                         # Folder containing all generated visualizations
+  ├── plots/                         # Folder containing all generated visualizations
   ├── Final_visualiztions/           # Consolidated final visual outputs for analysis
   ├── Data_Cleaning.R                # Script for data cleaning and preprocessing
   ├── summarystat_analysis_visuals.R # Script combining summary statistics and visualizations
