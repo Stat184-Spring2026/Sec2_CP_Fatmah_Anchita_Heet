@@ -142,21 +142,21 @@ Pull requests for peer review
 
 ## Repo Structure
 
-├── data/                          # Dataset files (raw and/or processed)
-├── plots/                         # Folder containing all generated visualizations
-├── Final_visualiztions/           # Consolidated final visual outputs for analysis
-├── Data_Cleaning.R                # Script for data cleaning and preprocessing
-├── summarystat_analysis_visuals.R # Script combining summary statistics and visualizations
-├── linting_script.R               # Code quality and linting checks
-├── Mushroom_project.qmd           # Main Quarto report file
-├── Project Plan                   # Detailed project planning document
-├── Project_Guidelines.md          # Guidelines and requirements for the project
-├── README.md                      # Project documentation
-├── .gitignore                     # Specifies files ignored by Git
-├── .gitattributes                 # Git configuration for file handling
-├── .lintr                         # Linting rules for R code
-├── MLA9.csl                       # Citation style file (MLA format)
-└── apa7.csl                       # Citation style file (APA format)
+  ├── data/                          # Dataset files (raw and/or processed)
+  ├── plots/                         # Folder containing all generated visualizations
+  ├── Final_visualiztions/           # Consolidated final visual outputs for analysis
+  ├── Data_Cleaning.R                # Script for data cleaning and preprocessing
+  ├── summarystat_analysis_visuals.R # Script combining summary statistics and visualizations
+  ├── linting_script.R               # Code quality and linting checks
+  ├── Mushroom_project.qmd           # Main Quarto report file
+  ├── Project Plan                   # Detailed project planning document
+  ├── Project_Guidelines.md          # Guidelines and requirements for the project
+  ├── README.md                      # Project documentation
+  ├── .gitignore                     # Specifies files ignored by Git
+  ├── .gitattributes                 # Git configuration for file handling
+  ├── .lintr                         # Linting rules for R code
+  ├── MLA9.csl                       # Citation style file (MLA format)
+  └── apa7.csl                       # Citation style file (APA format)
 
 Key Files
 - Data_Cleaning.R → Handles dataset import, cleaning, recoding of categorical variables, and formatting for analysis
