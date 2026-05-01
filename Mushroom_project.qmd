@@ -1,5 +1,9 @@
 ---
 title: "Project_report"
+author:
+  - "Anchita Mitra"
+  - "Fatmah Almeer"
+  - "Heet Jatin Patel"
 format: pdf
 editor: visual
 ---
@@ -26,17 +30,166 @@ There are over 8,000 observations in this data set and over 20 attributes, provi
 
 This dataset satisfies several FAIR principles:
 
--  **Findable:** The mushroom dataset is publicly available and well known in educational and research settings.
+-   **Findable:** The mushroom dataset is publicly available and well known in educational and research settings.
 
--  **Accessible:** The data can be downloaded in standard text format and easily imported into R.
+-   **Accessible:** The data can be downloaded in standard text format and easily imported into R.
 
--  **Interoperable:** Because the data are structured in rows and columns, they can be used across multiple software platforms such as R, Python, and spreadsheet tools.
+-   **Interoperable:** Because the data are structured in rows and columns, they can be used across multiple software platforms such as R, Python, and spreadsheet tools.
 
--  **Reusable:** The variables are documented through a Quatro file, allowing future users to understand and reuse the dataset effectively.
+-   **Reusable:** The variables are documented through a Quatro file, allowing future users to understand and reuse the dataset effectively.
 
 ### CARE Principles
 
 The CARE principles emphasize the following: Collective Benefit, Authority to Control, Responsibility, and Ethics. In this case, since the dataset is devoid of any personal and community-held human data, the CARE principles are relevant only to an extent in contrast to social and indigenous datasets. However, in our research, we embrace the spirit of CARE principles through responsible use of the dataset and proper reporting of findings.
+
+## Data Preparation
+
+The original data file stored each categorical value as a one-character code. We renamed the columns and decoded the attributes and their values using the dataset documentation. After importing the data, we checked the number of rows and columns against the codebook to confirm that the class labels were decoded into the right categories. For the missing data, we switched the values from `?` to `NULL` as an indication of a missing value.
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+raw_mushrooms <- read.table("data/agaricus-lepiota.data", header = FALSE, sep = ",")
+
+mushrooms_clean <- raw_mushrooms |>
+  rename(
+    `classes` = V1,
+    `cap-shape` = V2,
+    `cap-surface` = V3,
+    `cap-color` = V4,
+    `bruises?` = V5,
+    `odor` = V6,
+    `gill-attachment` = V7,
+    `gill-spacing` = V8,
+    `gill-size` = V9,
+    `gill-color` = V10,
+    `stalk-shape` = V11,
+    `stalk-root` = V12,
+    `stalk-surface-above-ring` = V13,
+    `stalk-surface-below-ring` = V14,
+    `stalk-color-above-ring` = V15,
+    `stalk-color-below-ring` = V16,
+    `veil-type` = V17,
+    `veil-color` = V18,
+    `ring-number` = V19,
+    `ring-type` = V20,
+    `spore-print-color` = V21,
+    `population` = V22,
+    `habitat` = V23
+  ) |>
+  mutate(
+    classes = recode(
+      classes,
+      e = "edible", p = "poisonous", `?` = NULL
+    ),
+    `cap-shape` = recode(
+      `cap-shape`,
+      b = "bell", c = "conical", x = "convex",
+      f = "flat", k = "knobbed", s = "sunken", `?` = NULL
+    ),
+    `cap-surface` = recode(
+      `cap-surface`,
+      f = "fibrous", g = "grooves", y = "scaly", s = "smooth", `?` = NULL
+    ),
+    `cap-color` = recode(
+      `cap-color`,
+      n = "brown", b = "buff", c = "cinnamon", g = "gray",
+      r = "green", p = "pink", u = "purple", e = "red",
+      w = "white", y = "yellow", `?` = NULL
+    ),
+    `bruises?` = recode(
+      `bruises?`,
+      t = "bruises", f = "no bruises", `?` = NULL
+    ),
+    odor = recode(
+      odor,
+      a = "almond", l = "anise", c = "creosote", y = "fishy",
+      f = "foul", m = "musty", n = "none", p = "pungent", s = "spicy", `?` = NULL
+    ),
+    `gill-attachment` = recode(
+      `gill-attachment`,
+      a = "attached", d = "descending", f = "free", n = "notched", `?` = NULL
+    ),
+    `gill-spacing` = recode(
+      `gill-spacing`,
+      c = "close", w = "crowded", d = "distant", `?` = NULL
+    ),
+    `gill-size` = recode(
+      `gill-size`,
+      b = "broad", n = "narrow", `?` = NULL
+    ),
+    `gill-color` = recode(
+      `gill-color`,
+      k = "black", n = "brown", b = "buff", h = "chocolate",
+      g = "gray", r = "green", o = "orange", p = "pink",
+      u = "purple", e = "red", w = "white", y = "yellow", `?` = NULL
+    ),
+    `stalk-shape` = recode(
+      `stalk-shape`,
+      e = "enlarging", t = "tapering", `?` = NULL
+    ),
+    `stalk-root` = recode(
+      `stalk-root`,
+      b = "bulbous", c = "club", u = "cup", e = "equal",
+      z = "rhizomorphs", r = "rooted", `?` = NULL
+    ),
+    `stalk-surface-above-ring` = recode(
+      `stalk-surface-above-ring`,
+      f = "fibrous", y = "scaly", k = "silky", s = "smooth", `?` = NULL
+    ),
+    `stalk-surface-below-ring` = recode(
+      `stalk-surface-below-ring`,
+      f = "fibrous", y = "scaly", k = "silky", s = "smooth", `?` = NULL
+    ),
+    `stalk-color-above-ring` = recode(
+      `stalk-color-above-ring`,
+      n = "brown", b = "buff", c = "cinnamon", g = "gray",
+      o = "orange", p = "pink", e = "red", w = "white", y = "yellow", `?` = NULL
+    ),
+    `stalk-color-below-ring` = recode(
+      `stalk-color-below-ring`,
+      n = "brown", b = "buff", c = "cinnamon", g = "gray",
+      o = "orange", p = "pink", e = "red", w = "white", y = "yellow", `?` = NULL
+    ),
+    `veil-type` = recode(
+      `veil-type`,
+      p = "partial", u = "universal", `?` = NULL
+    ),
+    `veil-color` = recode(
+      `veil-color`,
+      n = "brown", o = "orange", w = "white", y = "yellow", `?` = NULL
+    ),
+    `ring-number` = recode(
+      `ring-number`, 
+      n = "none", o = "one", t = "two", `?` = NULL
+    ),
+    `ring-type` = recode(
+      `ring-type`,
+      c = "cobwebby", e = "evanescent", f = "flaring",
+      l = "large", n = "none", p = "pendant",
+      s = "sheathing", z = "zone", `?` = NULL
+    ),
+    `spore-print-color` = recode(
+      `spore-print-color`,
+      k = "black", n = "brown", b = "buff", h = "chocolate",
+      r = "green", o = "orange", u = "purple",
+      w = "white", y = "yellow", `?` = NULL
+    ),
+    population = recode(
+      population,
+      a = "abundant", c = "clustered", n = "numerous",
+      s = "scattered", v = "several", y = "solitary", `?` = NULL
+    ),
+    habitat = recode(
+      habitat,
+      g = "grasses", l = "leaves", m = "meadows",
+      p = "paths", u = "urban", w = "waste", d = "woods", `?` = NULL
+    )
+  )
+```
+
 
 ## Interpretation of Key Findings
 
