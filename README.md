@@ -142,6 +142,7 @@ Pull requests for peer review
 
 ## Repo Structure
 
+```
   ├── data/                          # Dataset files (raw and/or processed)
   |── plots/                         # Folder containing all generated visualizations
   ├── Final_visualiztions/           # Consolidated final visual outputs for analysis
@@ -157,6 +158,7 @@ Pull requests for peer review
   ├── .lintr                         # Linting rules for R code
   ├── MLA9.csl                       # Citation style file (MLA format)
   └── apa7.csl                       # Citation style file (APA format)
+```
 
 Key Files
 - Data_Cleaning.R → Handles dataset import, cleaning, recoding of categorical variables, and formatting for analysis
