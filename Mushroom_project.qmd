@@ -44,23 +44,27 @@ The CARE principles emphasize the following: Collective Benefit, Authority to Co
 
 ## Data Preparation
 
-The original data file stored each categorical value as a one-character code. We renamed the columns and decoded the attributes and their values using the dataset documentation. After importing the data, we checked the number of rows and columns against the codebook to confirm that the class labels were decoded into the right categories. For the missing data, we switched the values from `?` to `NULL` as an indication of a missing value.
+The original data file stored each categorical value as a one-character code. We renamed the columns and decoded the attributes and their values using the dataset documentation. After importing the data, we checked the number of rows and columns against the codebook to confirm that the class labels were decoded into the right categories. For the missing data, we switched the values from `?` to `NULL` using `NA_character_` as an indication of a missing value.
+
+-   The cleaned dataset contains 8,124 mushroom cases and 23 variables.
 
 ```{r}
 #| echo: false
-#| warning: false
 #| message: false
+#| warning: false
+
+library(dplyr)
 
 raw_mushrooms <- read.table("data/agaricus-lepiota.data", header = FALSE, sep = ",")
 
 mushrooms_clean <- raw_mushrooms |>
   rename(
-    `classes` = V1,
+    classes = V1,
     `cap-shape` = V2,
     `cap-surface` = V3,
     `cap-color` = V4,
     `bruises?` = V5,
-    `odor` = V6,
+    odor = V6,
     `gill-attachment` = V7,
     `gill-spacing` = V8,
     `gill-size` = V9,
@@ -76,120 +80,231 @@ mushrooms_clean <- raw_mushrooms |>
     `ring-number` = V19,
     `ring-type` = V20,
     `spore-print-color` = V21,
-    `population` = V22,
-    `habitat` = V23
+    population = V22,
+    habitat = V23
   ) |>
   mutate(
-    classes = recode(
-      classes,
-      e = "edible", p = "poisonous", `?` = NULL
+    classes = case_when(
+      classes == "e" ~ "edible",
+      classes == "p" ~ "poisonous",
+      classes == "?" ~ NA_character_,
+      TRUE ~ classes
     ),
-    `cap-shape` = recode(
-      `cap-shape`,
-      b = "bell", c = "conical", x = "convex",
-      f = "flat", k = "knobbed", s = "sunken", `?` = NULL
+    `cap-shape` = case_when(
+      `cap-shape` == "b" ~ "bell",
+      `cap-shape` == "c" ~ "conical",
+      `cap-shape` == "x" ~ "convex",
+      `cap-shape` == "f" ~ "flat",
+      `cap-shape` == "k" ~ "knobbed",
+      `cap-shape` == "s" ~ "sunken",
+      `cap-shape` == "?" ~ NA_character_,
+      TRUE ~ `cap-shape`
     ),
-    `cap-surface` = recode(
-      `cap-surface`,
-      f = "fibrous", g = "grooves", y = "scaly", s = "smooth", `?` = NULL
+    `cap-surface` = case_when(
+      `cap-surface` == "f" ~ "fibrous",
+      `cap-surface` == "g" ~ "grooves",
+      `cap-surface` == "y" ~ "scaly",
+      `cap-surface` == "s" ~ "smooth",
+      `cap-surface` == "?" ~ NA_character_,
+      TRUE ~ `cap-surface`
     ),
-    `cap-color` = recode(
-      `cap-color`,
-      n = "brown", b = "buff", c = "cinnamon", g = "gray",
-      r = "green", p = "pink", u = "purple", e = "red",
-      w = "white", y = "yellow", `?` = NULL
+    `cap-color` = case_when(
+      `cap-color` == "n" ~ "brown",
+      `cap-color` == "b" ~ "buff",
+      `cap-color` == "c" ~ "cinnamon",
+      `cap-color` == "g" ~ "gray",
+      `cap-color` == "r" ~ "green",
+      `cap-color` == "p" ~ "pink",
+      `cap-color` == "u" ~ "purple",
+      `cap-color` == "e" ~ "red",
+      `cap-color` == "w" ~ "white",
+      `cap-color` == "y" ~ "yellow",
+      `cap-color` == "?" ~ NA_character_,
+      TRUE ~ `cap-color`
     ),
-    `bruises?` = recode(
-      `bruises?`,
-      t = "bruises", f = "no bruises", `?` = NULL
+    `bruises?` = case_when(
+      `bruises?` == "t" ~ "bruises",
+      `bruises?` == "f" ~ "no bruises",
+      `bruises?` == "?" ~ NA_character_,
+      TRUE ~ `bruises?`
     ),
-    odor = recode(
-      odor,
-      a = "almond", l = "anise", c = "creosote", y = "fishy",
-      f = "foul", m = "musty", n = "none", p = "pungent", s = "spicy", `?` = NULL
+    odor = case_when(
+      odor == "a" ~ "almond",
+      odor == "l" ~ "anise",
+      odor == "c" ~ "creosote",
+      odor == "y" ~ "fishy",
+      odor == "f" ~ "foul",
+      odor == "m" ~ "musty",
+      odor == "n" ~ "none",
+      odor == "p" ~ "pungent",
+      odor == "s" ~ "spicy",
+      odor == "?" ~ NA_character_,
+      TRUE ~ odor
     ),
-    `gill-attachment` = recode(
-      `gill-attachment`,
-      a = "attached", d = "descending", f = "free", n = "notched", `?` = NULL
+    `gill-attachment` = case_when(
+      `gill-attachment` == "a" ~ "attached",
+      `gill-attachment` == "d" ~ "descending",
+      `gill-attachment` == "f" ~ "free",
+      `gill-attachment` == "n" ~ "notched",
+      `gill-attachment` == "?" ~ NA_character_,
+      TRUE ~ `gill-attachment`
     ),
-    `gill-spacing` = recode(
-      `gill-spacing`,
-      c = "close", w = "crowded", d = "distant", `?` = NULL
+    `gill-spacing` = case_when(
+      `gill-spacing` == "c" ~ "close",
+      `gill-spacing` == "w" ~ "crowded",
+      `gill-spacing` == "d" ~ "distant",
+      `gill-spacing` == "?" ~ NA_character_,
+      TRUE ~ `gill-spacing`
     ),
-    `gill-size` = recode(
-      `gill-size`,
-      b = "broad", n = "narrow", `?` = NULL
+    `gill-size` = case_when(
+      `gill-size` == "b" ~ "broad",
+      `gill-size` == "n" ~ "narrow",
+      `gill-size` == "?" ~ NA_character_,
+      TRUE ~ `gill-size`
     ),
-    `gill-color` = recode(
-      `gill-color`,
-      k = "black", n = "brown", b = "buff", h = "chocolate",
-      g = "gray", r = "green", o = "orange", p = "pink",
-      u = "purple", e = "red", w = "white", y = "yellow", `?` = NULL
+    `gill-color` = case_when(
+      `gill-color` == "k" ~ "black",
+      `gill-color` == "n" ~ "brown",
+      `gill-color` == "b" ~ "buff",
+      `gill-color` == "h" ~ "chocolate",
+      `gill-color` == "g" ~ "gray",
+      `gill-color` == "r" ~ "green",
+      `gill-color` == "o" ~ "orange",
+      `gill-color` == "p" ~ "pink",
+      `gill-color` == "u" ~ "purple",
+      `gill-color` == "e" ~ "red",
+      `gill-color` == "w" ~ "white",
+      `gill-color` == "y" ~ "yellow",
+      `gill-color` == "?" ~ NA_character_,
+      TRUE ~ `gill-color`
     ),
-    `stalk-shape` = recode(
-      `stalk-shape`,
-      e = "enlarging", t = "tapering", `?` = NULL
+    `stalk-shape` = case_when(
+      `stalk-shape` == "e" ~ "enlarging",
+      `stalk-shape` == "t" ~ "tapering",
+      `stalk-shape` == "?" ~ NA_character_,
+      TRUE ~ `stalk-shape`
     ),
-    `stalk-root` = recode(
-      `stalk-root`,
-      b = "bulbous", c = "club", u = "cup", e = "equal",
-      z = "rhizomorphs", r = "rooted", `?` = NULL
+    `stalk-root` = case_when(
+      `stalk-root` == "b" ~ "bulbous",
+      `stalk-root` == "c" ~ "club",
+      `stalk-root` == "u" ~ "cup",
+      `stalk-root` == "e" ~ "equal",
+      `stalk-root` == "z" ~ "rhizomorphs",
+      `stalk-root` == "r" ~ "rooted",
+      `stalk-root` == "?" ~ NA_character_,
+      TRUE ~ `stalk-root`
     ),
-    `stalk-surface-above-ring` = recode(
-      `stalk-surface-above-ring`,
-      f = "fibrous", y = "scaly", k = "silky", s = "smooth", `?` = NULL
+    `stalk-surface-above-ring` = case_when(
+      `stalk-surface-above-ring` == "f" ~ "fibrous",
+      `stalk-surface-above-ring` == "y" ~ "scaly",
+      `stalk-surface-above-ring` == "k" ~ "silky",
+      `stalk-surface-above-ring` == "s" ~ "smooth",
+      `stalk-surface-above-ring` == "?" ~ NA_character_,
+      TRUE ~ `stalk-surface-above-ring`
     ),
-    `stalk-surface-below-ring` = recode(
-      `stalk-surface-below-ring`,
-      f = "fibrous", y = "scaly", k = "silky", s = "smooth", `?` = NULL
+    `stalk-surface-below-ring` = case_when(
+      `stalk-surface-below-ring` == "f" ~ "fibrous",
+      `stalk-surface-below-ring` == "y" ~ "scaly",
+      `stalk-surface-below-ring` == "k" ~ "silky",
+      `stalk-surface-below-ring` == "s" ~ "smooth",
+      `stalk-surface-below-ring` == "?" ~ NA_character_,
+      TRUE ~ `stalk-surface-below-ring`
     ),
-    `stalk-color-above-ring` = recode(
-      `stalk-color-above-ring`,
-      n = "brown", b = "buff", c = "cinnamon", g = "gray",
-      o = "orange", p = "pink", e = "red", w = "white", y = "yellow", `?` = NULL
+    `stalk-color-above-ring` = case_when(
+      `stalk-color-above-ring` == "n" ~ "brown",
+      `stalk-color-above-ring` == "b" ~ "buff",
+      `stalk-color-above-ring` == "c" ~ "cinnamon",
+      `stalk-color-above-ring` == "g" ~ "gray",
+      `stalk-color-above-ring` == "o" ~ "orange",
+      `stalk-color-above-ring` == "p" ~ "pink",
+      `stalk-color-above-ring` == "e" ~ "red",
+      `stalk-color-above-ring` == "w" ~ "white",
+      `stalk-color-above-ring` == "y" ~ "yellow",
+      `stalk-color-above-ring` == "?" ~ NA_character_,
+      TRUE ~ `stalk-color-above-ring`
     ),
-    `stalk-color-below-ring` = recode(
-      `stalk-color-below-ring`,
-      n = "brown", b = "buff", c = "cinnamon", g = "gray",
-      o = "orange", p = "pink", e = "red", w = "white", y = "yellow", `?` = NULL
+    `stalk-color-below-ring` = case_when(
+      `stalk-color-below-ring` == "n" ~ "brown",
+      `stalk-color-below-ring` == "b" ~ "buff",
+      `stalk-color-below-ring` == "c" ~ "cinnamon",
+      `stalk-color-below-ring` == "g" ~ "gray",
+      `stalk-color-below-ring` == "o" ~ "orange",
+      `stalk-color-below-ring` == "p" ~ "pink",
+      `stalk-color-below-ring` == "e" ~ "red",
+      `stalk-color-below-ring` == "w" ~ "white",
+      `stalk-color-below-ring` == "y" ~ "yellow",
+      `stalk-color-below-ring` == "?" ~ NA_character_,
+      TRUE ~ `stalk-color-below-ring`
     ),
-    `veil-type` = recode(
-      `veil-type`,
-      p = "partial", u = "universal", `?` = NULL
+    `veil-type` = case_when(
+      `veil-type` == "p" ~ "partial",
+      `veil-type` == "u" ~ "universal",
+      `veil-type` == "?" ~ NA_character_,
+      TRUE ~ `veil-type`
     ),
-    `veil-color` = recode(
-      `veil-color`,
-      n = "brown", o = "orange", w = "white", y = "yellow", `?` = NULL
+    `veil-color` = case_when(
+      `veil-color` == "n" ~ "brown",
+      `veil-color` == "o" ~ "orange",
+      `veil-color` == "w" ~ "white",
+      `veil-color` == "y" ~ "yellow",
+      `veil-color` == "?" ~ NA_character_,
+      TRUE ~ `veil-color`
     ),
-    `ring-number` = recode(
-      `ring-number`, 
-      n = "none", o = "one", t = "two", `?` = NULL
+    `ring-number` = case_when(
+      `ring-number` == "n" ~ "none",
+      `ring-number` == "o" ~ "one",
+      `ring-number` == "t" ~ "two",
+      `ring-number` == "?" ~ NA_character_,
+      TRUE ~ `ring-number`
     ),
-    `ring-type` = recode(
-      `ring-type`,
-      c = "cobwebby", e = "evanescent", f = "flaring",
-      l = "large", n = "none", p = "pendant",
-      s = "sheathing", z = "zone", `?` = NULL
+    `ring-type` = case_when(
+      `ring-type` == "c" ~ "cobwebby",
+      `ring-type` == "e" ~ "evanescent",
+      `ring-type` == "f" ~ "flaring",
+      `ring-type` == "l" ~ "large",
+      `ring-type` == "n" ~ "none",
+      `ring-type` == "p" ~ "pendant",
+      `ring-type` == "s" ~ "sheathing",
+      `ring-type` == "z" ~ "zone",
+      `ring-type` == "?" ~ NA_character_,
+      TRUE ~ `ring-type`
     ),
-    `spore-print-color` = recode(
-      `spore-print-color`,
-      k = "black", n = "brown", b = "buff", h = "chocolate",
-      r = "green", o = "orange", u = "purple",
-      w = "white", y = "yellow", `?` = NULL
+    `spore-print-color` = case_when(
+      `spore-print-color` == "k" ~ "black",
+      `spore-print-color` == "n" ~ "brown",
+      `spore-print-color` == "b" ~ "buff",
+      `spore-print-color` == "h" ~ "chocolate",
+      `spore-print-color` == "r" ~ "green",
+      `spore-print-color` == "o" ~ "orange",
+      `spore-print-color` == "u" ~ "purple",
+      `spore-print-color` == "w" ~ "white",
+      `spore-print-color` == "y" ~ "yellow",
+      `spore-print-color` == "?" ~ NA_character_,
+      TRUE ~ `spore-print-color`
     ),
-    population = recode(
-      population,
-      a = "abundant", c = "clustered", n = "numerous",
-      s = "scattered", v = "several", y = "solitary", `?` = NULL
+    population = case_when(
+      population == "a" ~ "abundant",
+      population == "c" ~ "clustered",
+      population == "n" ~ "numerous",
+      population == "s" ~ "scattered",
+      population == "v" ~ "several",
+      population == "y" ~ "solitary",
+      population == "?" ~ NA_character_,
+      TRUE ~ population
     ),
-    habitat = recode(
-      habitat,
-      g = "grasses", l = "leaves", m = "meadows",
-      p = "paths", u = "urban", w = "waste", d = "woods", `?` = NULL
+    habitat = case_when(
+      habitat == "g" ~ "grasses",
+      habitat == "l" ~ "leaves",
+      habitat == "m" ~ "meadows",
+      habitat == "p" ~ "paths",
+      habitat == "u" ~ "urban",
+      habitat == "w" ~ "waste",
+      habitat == "d" ~ "woods",
+      habitat == "?" ~ NA_character_,
+      TRUE ~ habitat
     )
   )
 ```
-
 
 ## Interpretation of Key Findings
 
