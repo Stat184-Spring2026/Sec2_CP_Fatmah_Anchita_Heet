@@ -12,8 +12,7 @@ library(knitr)
 # 1. Import and Prepare Cleaned Data
 source("Data_Cleaning.R")
 
-data_clean <- data_with_columns_and_string_values |>
-  mutate(across(everything(), as.factor))
+data_clean <- data_with_columns_and_string_values
 
 
 # SUMMARY STATISTICS & PATTERNS :
