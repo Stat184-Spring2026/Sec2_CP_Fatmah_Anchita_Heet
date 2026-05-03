@@ -343,7 +343,7 @@ Odor appears to be one of the strongest indicators of mushroom classification. M
 ```{r}
 #| label: fig-odor
 #| fig-cap: "Mushroom edibility by odor."
-#| fig-alt: ""
+#| fig-alt: "A stacked bar chart showing edible and poisonous proportions for each odor type. Only one category overlaps bewteen poisonous and edible mushrooms, whcich is odorless"
 #| fig-pos: "H"
 #| echo: false
 #| message: false
@@ -417,7 +417,7 @@ Gill color in @fig-gill also shows noticeable differences between edible and poi
 ```{r}
 #| label: fig-gill
 #| fig-cap: "Counts of edible and poisonous mushrooms by gill color."
-#| fig-alt: "A grouped bar chart comparing edible and poisonous mushroom counts across gill colors. Some gill colors are associated mostly with one class, while others contain both edible and poisonous mushrooms."
+#| fig-alt: "A grouped bar chart that compares edible and poisonous mushroom across differnt gill colors. Few gill colors are associated mostly with one class, while the rest are associated with both edible and poisonous mushrooms."
 #| fig-pos: "H"
 #| echo: false
 #| message: false
@@ -472,7 +472,59 @@ gill_table |>
 
 ### Bruising
 
-Bruising patterns reveal another meaningful relationship. Mushrooms that bruise and mushrooms that do not bruise show different class proportions, suggesting bruising may provide additional classification insight when combined with other traits.
+When we look at the bruising patterns between the classes of mushrooms in @fig-bruising, we notice that whether a mushroom bruises or not is not a good indicated to whether the mushroom is edible or not. that bruise and mushrooms that do not bruise show different class proportions, suggesting bruising may provide additional classification insight when combined with other traits.
+
+```{r}
+#| label: fig-bruising
+#| fig-cap: "Mushroom edibility by bruising status."
+#| fig-alt: "A stacked bar chart that compares edible and poisonous mushrooms for bruising and no bruising categories."
+#| echo: false
+#| message: false
+#| warning: false
+
+bruising_plot_data <- mushrooms_clean |>
+  count(`bruises?`, classes, name = "count") |>
+  group_by(`bruises?`) |>
+  mutate(proportion = count / sum(count)) |>
+  ungroup()
+
+ggplot(bruising_plot_data, aes(x = `bruises?`, y = proportion, fill = classes)) +
+  geom_col(position = "stack", color = "white", linewidth = 0.2) +
+  scale_fill_manual(values = mushroom_colors) +
+  mushroom_theme +
+  labs(
+    title = "Mushroom Edibility by Bruising",
+    subtitle = "Bruising status adds another categorical comparison.",
+    x = "Bruising status",
+    y = "Proportion of samples",
+    fill = "Class"
+  )
+```
+
+```{r}
+#| label: tbl-bruising
+#| tbl-cap: "Poisonous mushroom rate by bruising status."
+#| echo: false
+#| message: false
+#| warning: false
+
+bruise_table <- mushrooms_clean |>
+  count(`bruises?`, classes, name = "count") |>
+  group_by(`bruises?`) |>
+  mutate(rate = count / sum(count)) |>
+  ungroup() |>
+  filter(classes == "poisonous") |>
+  arrange(-rate) |>
+  mutate(`Poisonous Rate` = paste(round(rate * 100, 1), "%")) |>
+  select(
+    Bruising = `bruises?`,
+    `Poisonous Count` = count,
+    `Poisonous Rate`
+  )
+
+bruise_table |>
+  kable()
+```
 
 ### Spore Print Color
 
