@@ -310,15 +310,165 @@ mushrooms_clean <- raw_mushrooms |>
 
 ### Class Distribution
 
-The dataset contains a relatively balanced distribution of edible and poisonous mushrooms. This is useful for exploratory analysis because comparisons between classes are not heavily distorted by extreme imbalance.
+As we see in @tbl-class. The dataset contains a relatively balanced distribution of edible and poisonous mushrooms (51.8% edible and 48.2% poisonous) . This is useful for exploratory analysis because comparisons between classes are not heavily distorted by extreme imbalance.
+
+```{r}
+#| label: tbl-class
+#| tbl-cap: "Distribution of edible and poisonous mushrooms in the dataset."
+#| echo: false
+#| message: false
+#| warning: false
+
+library(dplyr)
+library(knitr)
+
+class_table <- mushrooms_clean |>
+  count(classes, name = "count") |>
+  mutate(percentage = paste(round(count / sum(count) * 100, 1), "%"))
+
+class_table |>
+  rename(
+    Classification = classes,
+    Count = count,
+    Percentage = percentage
+  ) |>
+  kable()
+```
+
 
 ### Odor and Toxicity
 
-Odor appears to be one of the strongest indicators of mushroom classification. Mushrooms with foul, pungent, or fishy odors are much more likely to be poisonous, while mushrooms with almond, anise, or no odor are more commonly edible. This suggests odor may be one of the most informative observable characteristics in the dataset.
+Odor appears to be one of the strongest indicators of mushroom classification. Mushrooms with foul, pungent, or fishy odors are much more likely to be poisonous, while mushrooms with almond, anise, or no odor are more commonly edible. This suggests odor may be one of the most informative observable characteristics in the dataset. Looking at @fig-odor, we can see the proportion of edible and poisonous mushrooms within each odor category.
+
+```{r}
+#| label: fig-odor
+#| fig-cap: "Mushroom edibility by odor."
+#| fig-alt: ""
+#| fig-pos: "H"
+#| echo: false
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(knitr)
+
+mushroom_colors <- c(
+  edible = "#2c7a4b",
+  poisonous = "#8b3f8f"
+)
+
+mushroom_theme <- theme_bw()
+
+odor_plot_data <- mushrooms_clean |>
+  count(odor, classes, name = "count") |>
+  group_by(odor) |>
+  mutate(proportion = count / sum(count)) |>
+  ungroup() |>
+  arrange(-count)
+
+ggplot(odor_plot_data, aes(y = odor, x = proportion, fill = classes)) +
+  geom_col(position = "stack", color = "white", linewidth = 0.2) +
+  scale_fill_manual(values = mushroom_colors) +
+  mushroom_theme +
+  labs(
+    title = "Mushroom Edibility by Odor",
+    subtitle = "Odor categories show strong differences in class composition.",
+    x = "Proportion of samples",
+    y = "Odor type",
+    fill = "Class"
+  )
+```
+While @tbl-odor displays the poisonous rate for each odor category so the visual pattern can be connected to exact summary values. We can see that Mushrooms with no odor is the only category that have both edible and poisonous. It is true that the majority of the odorless mushrooms are edible, but we believe that it is safer to use other characteristics to confirm instead of just relying on odor and smell. 
+
+```{r}
+#| label: tbl-odor
+#| tbl-cap: "Poisonous mushroom rate by odor category."
+#| fig-alt: ""
+#| echo: false
+#| message: false
+#| warning: false
+
+
+library(tidyverse)
+library(knitr)
+
+odor_table <- mushrooms_clean |>
+  count(odor, classes, name = "count") |>
+  group_by(odor) |>
+  mutate(rate = count / sum(count)) |>
+  ungroup() |>
+  filter(classes == "poisonous") |>
+  arrange(-rate) |>
+  mutate(`Poisonous Rate` = paste(round(rate * 100, 1), "%")) |>
+  select(
+    Odor = odor,
+    `Poisonous Count` = count,
+    `Poisonous Rate`
+  )
+
+odor_table |>
+  kable()
+```
 
 ### Gill Color
 
-Gill color also shows noticeable differences between edible and poisonous mushrooms. Some colors appear more frequently in poisonous mushrooms, while others are more common among edible mushrooms. This indicates that internal structural features may help distinguish mushroom classes.
+Gill color in @fig-gill also shows noticeable differences between edible and poisonous mushrooms. Some colors appear more frequently in poisonous mushrooms, for example, Mushrooms with a buff gill color are always poisonous. While others are more common among edible mushrooms such as pink, brown, and white. These internal structural features can be used to further help distinguish mushroom classes.
+
+```{r}
+#| label: fig-gill
+#| fig-cap: "Counts of edible and poisonous mushrooms by gill color."
+#| fig-alt: "A grouped bar chart comparing edible and poisonous mushroom counts across gill colors. Some gill colors are associated mostly with one class, while others contain both edible and poisonous mushrooms."
+#| fig-pos: "H"
+#| echo: false
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(knitr)
+
+gill_plot_data <- mushrooms_clean |>
+  count(`gill-color`, classes, name = "count") |>
+  arrange(-count)
+
+ggplot(gill_plot_data, aes(x = `gill-color`, y = count, fill = classes)) +
+  geom_col(position = "dodge", color = "white", linewidth = 0.2) +
+  scale_fill_manual(values = mushroom_colors) +
+  mushroom_theme +
+  labs(
+    title = "Edibility Patterns by Gill Color",
+    subtitle = "Gill color categories differ in edible and poisonous counts.",
+    x = "Gill color",
+    y = "Number of mushrooms",
+    fill = "Class"
+  )
+```
+
+Looking at @tbl-gill, we can confirm that buff and green gill colors fall only under the poisonous mushroom class. In our previous case with odorless mushrooms, we can eliminate any odorless mushroom that have these colored gills.
+
+```{r}
+#| label: tbl-gill
+#| tbl-cap: "Poisonous mushroom rate by gill color."
+#| echo: false
+#| message: false
+#| warning: false
+
+gill_table <- mushrooms_clean |>
+  count(`gill-color`, classes, name = "count") |>
+  group_by(`gill-color`) |>
+  mutate(rate = count / sum(count)) |>
+  ungroup() |>
+  filter(classes == "poisonous") |>
+  arrange(-rate) |>
+  mutate(`Poisonous Rate` = paste(round(rate * 100, 1), "%")) |>
+  select(
+    `Gill Color` = `gill-color`,
+    `Poisonous Count` = count,
+    `Poisonous Rate`
+  )
+
+gill_table |>
+  kable()
+```
 
 ### Bruising
 
