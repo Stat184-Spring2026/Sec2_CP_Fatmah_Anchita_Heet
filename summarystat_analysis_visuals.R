@@ -1,13 +1,13 @@
 
 # MEMBER B: Summary statistics, analysis & visualisation
-# Project: Mushroom Exploratory Data Analysis 
+# Project: Mushroom Exploratory Data Analysis
 
 
 # Load Required Libraries
 library(dplyr)
 library(ggplot2)
 library(scales)
-library(knitr)  
+library(knitr)
 
 # 1. Import and Prepare Cleaned Data
 source("Data_Cleaning.R")
@@ -53,7 +53,7 @@ print(odor_summary)
 
 
 
-# PROFESSIONAL TABLES 
+# PROFESSIONAL TABLES
 
 # Table 1: Overall Distribution
 class_table <- data_clean |>
@@ -173,8 +173,8 @@ ggplot(data_clean, aes(x = `gill-color`, fill = classes)) +
 
 # Visual 3: Odor vs Class (HEATMAP)
 ggplot(data_clean, aes(x = classes, y = odor)) +
-  geom_bin2d() + 
-  scale_fill_gradient(low = "#2c7a4b", high = "#8b3f8f") + 
+  geom_bin2d() +
+  scale_fill_gradient(low = "#2c7a4b", high = "#8b3f8f") +
   mushroom_theme +
   labs(
     title = "Heatmap: Odor Frequency by Class",
@@ -241,7 +241,7 @@ ggplot(spore_bubble, aes(x = classes, y = `spore-print-color`, size = n, color =
   )
 
 
-# visual: Density-style Count Plot - Population Type 
+# visual: Density-style Count Plot - Population Type
 
 population_counts <- data_clean |>
   count(population, classes)
