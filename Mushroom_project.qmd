@@ -1,5 +1,5 @@
 ---
-title: "Project_report"
+title: "Exploring Mushroom Characteristics: Patterns Between Edible and Poisonous Mushrooms"
 author:
   - "Anchita Mitra"
   - "Fatmah Almeer"
@@ -8,15 +8,13 @@ format: pdf
 editor: visual
 ---
 
-# 
-
-## Introduction
+## Introduction:
 
 Apart from their importance in ecosystems, culinary dishes, and biodiversity, mushrooms pose a serious threat to public health in cases where they are misidentified and consumed. Given that there are many different types of mushrooms that look alike, finding characteristics that can differentiate between edible and poisonous mushrooms is both fascinating and relevant. Identifying the differences may allow us to learn how observable attributes can be linked to classification results.
 
 In the current project, our goal is to use the method of exploratory data analysis (EDA) to explore how different characteristics of mushrooms are related to whether or not they are poisonous. As opposed to developing prediction models, our main objective is to find patterns and features that show high predictive potential and compare the distribution of feature values.
 
-## Data Provenance
+## Data Provenance:
 
 The data set employed in this study is the Mushroom Data Set, which is also referred to as the Agaricus-Lepiota mushroom data set. This data set consists of hypothetical observations about mushrooms based on information about actual species belonging to the Agaricus and Lepiota families. The data set has a number of features, including those regarding the physical characteristics of the mushrooms like cap shape, cap color, odor, gill type, bruising, habitats, and spore print colors.
 
@@ -24,9 +22,9 @@ This data set is classified according to whether the mushrooms are either edible
 
 There are over 8,000 observations in this data set and over 20 attributes, providing enough data for exploratory purposes.
 
-## FAIR and CARE Principles
+## FAIR and CARE Principles:
 
-### FAIR Principles
+### FAIR Principles:
 
 This dataset satisfies several FAIR principles:
 
@@ -38,20 +36,25 @@ This dataset satisfies several FAIR principles:
 
 -   **Reusable:** The variables are documented through a Quatro file, allowing future users to understand and reuse the dataset effectively.
 
-### CARE Principles
+### CARE Principles:
 
 The CARE principles emphasize the following: Collective Benefit, Authority to Control, Responsibility, and Ethics. In this case, since the dataset is devoid of any personal and community-held human data, the CARE principles are relevant only to an extent in contrast to social and indigenous datasets. However, in our research, we embrace the spirit of CARE principles through responsible use of the dataset and proper reporting of findings.
 
-## Data Preparation
+## Data Preparation:
 
 The original data file stored each categorical value as a one-character code. We renamed the columns and decoded the attributes and their values using the dataset documentation. After importing the data, we checked the number of rows and columns against the codebook to confirm that the class labels were decoded into the right categories. For the missing data, we switched the values from `?` to `NULL` using `NA_character_` as an indication of a missing value.
 
 -   The cleaned dataset contains 8,124 mushroom cases and 23 variables.
 
 ```{r}
+#| label: load-and-clean-data
 #| echo: false
 #| message: false
 #| warning: false
+
+# Primary Author: Fatmah
+# Reviewer: Heet
+# PCIP: Plan to clean the raw local data and improve category names for readability.
 
 library(dplyr)
 
@@ -306,9 +309,9 @@ mushrooms_clean <- raw_mushrooms |>
   )
 ```
 
-## Interpretation of Key Findings
+## Interpretation of Key Findings:
 
-### Class Distribution
+### Class Distribution:
 
 As we see in @tbl-class. The dataset contains a relatively balanced distribution of edible and poisonous mushrooms (51.8% edible and 48.2% poisonous) . This is useful for exploratory analysis because comparisons between classes are not heavily distorted by extreme imbalance.
 
@@ -318,6 +321,10 @@ As we see in @tbl-class. The dataset contains a relatively balanced distribution
 #| echo: false
 #| message: false
 #| warning: false
+
+# Primary Author: Fatmah
+# Reviewer: Anchita
+# PCIP: Plan to create a summary of the mushroom classes, with counts and percentages.
 
 library(dplyr)
 library(knitr)
@@ -336,7 +343,7 @@ class_table |>
 ```
 
 
-### Odor and Toxicity
+### Odor and Toxicity:
 
 Odor appears to be one of the strongest indicators of mushroom classification. Mushrooms with foul, pungent, or fishy odors are much more likely to be poisonous, while mushrooms with almond, anise, or no odor are more commonly edible. This suggests odor may be one of the most informative observable characteristics in the dataset. Looking at @fig-odor, we can see the proportion of edible and poisonous mushrooms within each odor category.
 
@@ -348,6 +355,10 @@ Odor appears to be one of the strongest indicators of mushroom classification. M
 #| echo: false
 #| message: false
 #| warning: false
+
+# Primary Author: Fatmah
+# Reviewer: Heet
+# PCIP: Plan to compare odor by class and create a plot.
 
 library(tidyverse)
 library(knitr)
@@ -388,6 +399,9 @@ While @tbl-odor displays the poisonous rate for each odor category so the visual
 #| message: false
 #| warning: false
 
+# Primary Author: Fatmah
+# Reviewer: Anchita
+# PCIP: Plan to compute odor-specific poisonous rates and have a grouped summary.
 
 library(tidyverse)
 library(knitr)
@@ -410,7 +424,7 @@ odor_table |>
   kable()
 ```
 
-### Gill Color
+### Gill Color:
 
 Gill color in @fig-gill also shows noticeable differences between edible and poisonous mushrooms. Some colors appear more frequently in poisonous mushrooms, for example, Mushrooms with a buff gill color are always poisonous. While others are more common among edible mushrooms such as pink, brown, and white. These internal structural features can be used to further help distinguish mushroom classes.
 
@@ -422,6 +436,10 @@ Gill color in @fig-gill also shows noticeable differences between edible and poi
 #| echo: false
 #| message: false
 #| warning: false
+
+# Primary Author: Anchita
+# Reviewer: Fatmah
+# PCIP: Plan to compare gill colors and create a grouped bar chart to show the results.
 
 library(tidyverse)
 library(knitr)
@@ -452,6 +470,10 @@ Looking at @tbl-gill, we can confirm that buff and green gill colors fall only u
 #| message: false
 #| warning: false
 
+# Primary Author: Anchita
+# Reviewer: Heet
+# PCIP: Plan to summarize gill-color risk by calculating their poisonous rate.
+
 gill_table <- mushrooms_clean |>
   count(`gill-color`, classes, name = "count") |>
   group_by(`gill-color`) |>
@@ -470,7 +492,7 @@ gill_table |>
   kable()
 ```
 
-### Bruising
+### Bruising:
 
 When we look at the bruising patterns between the classes of mushrooms in @fig-bruising, we notice that whether a mushroom bruises or not is not a good indicated to whether the mushroom is edible or not. that bruise and mushrooms that do not bruise show different class proportions, suggesting bruising may provide additional classification insight when combined with other traits.
 
@@ -481,6 +503,10 @@ When we look at the bruising patterns between the classes of mushrooms in @fig-b
 #| echo: false
 #| message: false
 #| warning: false
+
+# Primary Author: Heet
+# Reviewer: Fatmah
+# PCIP: Plan to compare bruising status and see if can be used as another indicator of edible vs. poisonous mushroom.
 
 bruising_plot_data <- mushrooms_clean |>
   count(`bruises?`, classes, name = "count") |>
@@ -508,6 +534,10 @@ ggplot(bruising_plot_data, aes(x = `bruises?`, y = proportion, fill = classes)) 
 #| message: false
 #| warning: false
 
+# Primary Author: Heet
+# Reviewer: Anchita
+# PCIP: Plan to summarize bruising rates within the poisonous class.
+
 bruise_table <- mushrooms_clean |>
   count(`bruises?`, classes, name = "count") |>
   group_by(`bruises?`) |>
@@ -526,7 +556,7 @@ bruise_table |>
   kable()
 ```
 
-### Spore Print Color
+### Spore Print Color:
 
 To further see how we can distinguish between edible and poisonous mushrooms, we decided to look at spore print colors. @fig-spore shows us that some spore print colors have a higher association with a specific mushroom class. Only 3 categories have only one of the classes. These categories can be used to eliminate if the mushroom we have is edible or poisonous.
 
@@ -537,6 +567,10 @@ To further see how we can distinguish between edible and poisonous mushrooms, we
 #| echo: false
 #| message: false
 #| warning: false
+
+# Primary Author: Anchita
+# Reviewer: Heet
+# PCIP: Plan to compare the different spore print colors between each class.
 
 spore_plot_data <- mushrooms_clean |>
   count(`spore-print-color`, classes, name = "count") |>
@@ -563,6 +597,10 @@ Looking at @tbl-spore, we can see that green spores are the only true indicator 
 #| message: false
 #| warning: false
 
+# Primary Author: Anchita
+# Reviewer: Fatmah
+# PCIP: Plan to summarize spore print color rates within the poisonous class.
+
 spore_table <- mushrooms_clean |>
   count(`spore-print-color`, classes, name = "count") |>
   group_by(`spore-print-color`) |>
@@ -581,12 +619,38 @@ spore_table |>
   kable()
 ```
 
-## Limitations
+## Limitations:
 
 Although this dataset is rich in categorical features, it does not include geographic location, or a time period that could offer additional insight. Also, we are not aware of how representative the 8,124 mushroom samples in the dataset. For example, where they collected from all location or if they were inclusive of all mushrooms.
 Thus, our exploratory analysis and results should be taken with cation, and not to be considered as a safe field guide for mushroom identification, not should it replace expert knowledge or real-world safety procedures.
 
-## Conclusion
+####Limitations
+
+This dataset has many useful categorical features, but it still has some limitations. It does not include location, time period, weather, soil conditions, or detailed biological measurements. These extra details could have helped us understand the mushrooms in a more realistic way.
+
+Also, some of the categories in the dataset are simplified. This means the data may not fully match the complexity of identifying mushrooms in the real world. Because this project is based on exploratory analysis, the results only show patterns and relationships. They do not prove that one feature directly causes a mushroom to be edible or poisonous.
+
+Most importantly, this report should not be used as a field guide for mushroom identification. The dataset is useful for learning and finding patterns, but real mushroom identification should still be done by experts and with proper safety steps.
+
+## PCIP and Code Quality:
+
+We used the PCIP process throughout the project: planning, coding, improving, and polishing.
+
+In the planning stage, we focused on the mushroom class variable because it tells us whether each mushroom is edible or poisonous. We then chose categorical features that were useful, and easy to connect back to how to distinguish between the edible and poisonous mushrooms. 
+
+In the coding stage, we loaded the data file, renamed variables, decoded the category labels, and created summary tables. This gave is summeriest that are easier to understand and work with. Tasks were divided between us and carried supporter between the team members.
+
+In the improvement stage, we checked each other work and provided suggestions for each other to improve the final report. We also reused summary objects and revised our tables and plots so the results were easier to read.
+
+In the polish stage, we followed each others comments and added captions, alt text, cross-references, and a code appendix. This made the report more organized, easier to follow, and easier to reproduce.
+
+## Open Science and Reproducibility:
+
+This project supports reproducibility by keeping the raw data, code, summary tables, and visualizations in one repository. The report can be easily rendered from the QMD file `Mushroom_project.qmd` saved in the repository.
+
+We also used cross-referenced tables and figures so readers can connect the explanations we provided to actual data. We provided code chunks at the end of the report in the code appendix to show how the results were created.
+
+## Conclusion:
 
 In this project, we used exploratory data analysis to better understand how different mushroom features relate to whether a mushroom is edible or poisonous. The results showed that some features were much more useful than others. Odor was one of the strongest indicators, while gill color, bruising, and spore print color also helped separate the two classes.
 
@@ -594,266 +658,84 @@ One important takeaway is that one feature by itself is not always enough. Some 
 
 ## Author Contributions
 
-**Fatmah:** Data import, cleaning, variable recoding, documentation review.\
+**Fatmah:** Data import, cleaning, variable recording, documentation review.\
 **Anchita:** Summary statistics, tables, visualizations, pattern analysis.\
 **Heet:** Report writing, data provenance, FAIR/CARE discussion, conclusions, formatting and final review.
 
+**NOTE:** All team members contributed to deciding the research focus, reviewing the dataset documentation, and interpreting the results.
+
+## References
+
+Lincoff, G. H. (1981). *The Audubon Society Field Guide to North American Mushrooms*. Alfred A. Knopf.
+
+Schlimmer, J. (1987). *Mushroom Database*. UCI Machine Learning Repository. Dataset documentation included in this repository in `data/agaricus-lepiota.names`.
 
 \newpage
 
 ## Appendix
 
-### Dataset cleaning:
+### Dataset cleaning code:
+
 ```{r}
-library(dplyr)
+#| label: appendix-load-clean-source
+#| ref.label: load-and-clean-data
+#| eval: false
+```
 
-raw_mushrooms <- read.table("data/agaricus-lepiota.data", header = FALSE, sep = ",") #Loading the data file
+### Plot creating code:
 
-mushrooms_clean <- raw_mushrooms |>
-  rename( # renaming the columns
-    classes = V1,
-    `cap-shape` = V2,
-    `cap-surface` = V3,
-    `cap-color` = V4,
-    `bruises?` = V5,
-    odor = V6,
-    `gill-attachment` = V7,
-    `gill-spacing` = V8,
-    `gill-size` = V9,
-    `gill-color` = V10,
-    `stalk-shape` = V11,
-    `stalk-root` = V12,
-    `stalk-surface-above-ring` = V13,
-    `stalk-surface-below-ring` = V14,
-    `stalk-color-above-ring` = V15,
-    `stalk-color-below-ring` = V16,
-    `veil-type` = V17,
-    `veil-color` = V18,
-    `ring-number` = V19,
-    `ring-type` = V20,
-    `spore-print-color` = V21,
-    population = V22,
-    habitat = V23
-  ) |>
-  mutate( #switching row values with string values instead of one letter value
-    classes = case_when(
-      classes == "e" ~ "edible",
-      classes == "p" ~ "poisonous",
-      classes == "?" ~ NA_character_,
-      TRUE ~ classes
-    ),
-    `cap-shape` = case_when(
-      `cap-shape` == "b" ~ "bell",
-      `cap-shape` == "c" ~ "conical",
-      `cap-shape` == "x" ~ "convex",
-      `cap-shape` == "f" ~ "flat",
-      `cap-shape` == "k" ~ "knobbed",
-      `cap-shape` == "s" ~ "sunken",
-      `cap-shape` == "?" ~ NA_character_,
-      TRUE ~ `cap-shape`
-    ),
-    `cap-surface` = case_when(
-      `cap-surface` == "f" ~ "fibrous",
-      `cap-surface` == "g" ~ "grooves",
-      `cap-surface` == "y" ~ "scaly",
-      `cap-surface` == "s" ~ "smooth",
-      `cap-surface` == "?" ~ NA_character_,
-      TRUE ~ `cap-surface`
-    ),
-    `cap-color` = case_when(
-      `cap-color` == "n" ~ "brown",
-      `cap-color` == "b" ~ "buff",
-      `cap-color` == "c" ~ "cinnamon",
-      `cap-color` == "g" ~ "gray",
-      `cap-color` == "r" ~ "green",
-      `cap-color` == "p" ~ "pink",
-      `cap-color` == "u" ~ "purple",
-      `cap-color` == "e" ~ "red",
-      `cap-color` == "w" ~ "white",
-      `cap-color` == "y" ~ "yellow",
-      `cap-color` == "?" ~ NA_character_,
-      TRUE ~ `cap-color`
-    ),
-    `bruises?` = case_when(
-      `bruises?` == "t" ~ "bruises",
-      `bruises?` == "f" ~ "no bruises",
-      `bruises?` == "?" ~ NA_character_,
-      TRUE ~ `bruises?`
-    ),
-    odor = case_when(
-      odor == "a" ~ "almond",
-      odor == "l" ~ "anise",
-      odor == "c" ~ "creosote",
-      odor == "y" ~ "fishy",
-      odor == "f" ~ "foul",
-      odor == "m" ~ "musty",
-      odor == "n" ~ "none",
-      odor == "p" ~ "pungent",
-      odor == "s" ~ "spicy",
-      odor == "?" ~ NA_character_,
-      TRUE ~ odor
-    ),
-    `gill-attachment` = case_when(
-      `gill-attachment` == "a" ~ "attached",
-      `gill-attachment` == "d" ~ "descending",
-      `gill-attachment` == "f" ~ "free",
-      `gill-attachment` == "n" ~ "notched",
-      `gill-attachment` == "?" ~ NA_character_,
-      TRUE ~ `gill-attachment`
-    ),
-    `gill-spacing` = case_when(
-      `gill-spacing` == "c" ~ "close",
-      `gill-spacing` == "w" ~ "crowded",
-      `gill-spacing` == "d" ~ "distant",
-      `gill-spacing` == "?" ~ NA_character_,
-      TRUE ~ `gill-spacing`
-    ),
-    `gill-size` = case_when(
-      `gill-size` == "b" ~ "broad",
-      `gill-size` == "n" ~ "narrow",
-      `gill-size` == "?" ~ NA_character_,
-      TRUE ~ `gill-size`
-    ),
-    `gill-color` = case_when(
-      `gill-color` == "k" ~ "black",
-      `gill-color` == "n" ~ "brown",
-      `gill-color` == "b" ~ "buff",
-      `gill-color` == "h" ~ "chocolate",
-      `gill-color` == "g" ~ "gray",
-      `gill-color` == "r" ~ "green",
-      `gill-color` == "o" ~ "orange",
-      `gill-color` == "p" ~ "pink",
-      `gill-color` == "u" ~ "purple",
-      `gill-color` == "e" ~ "red",
-      `gill-color` == "w" ~ "white",
-      `gill-color` == "y" ~ "yellow",
-      `gill-color` == "?" ~ NA_character_,
-      TRUE ~ `gill-color`
-    ),
-    `stalk-shape` = case_when(
-      `stalk-shape` == "e" ~ "enlarging",
-      `stalk-shape` == "t" ~ "tapering",
-      `stalk-shape` == "?" ~ NA_character_,
-      TRUE ~ `stalk-shape`
-    ),
-    `stalk-root` = case_when(
-      `stalk-root` == "b" ~ "bulbous",
-      `stalk-root` == "c" ~ "club",
-      `stalk-root` == "u" ~ "cup",
-      `stalk-root` == "e" ~ "equal",
-      `stalk-root` == "z" ~ "rhizomorphs",
-      `stalk-root` == "r" ~ "rooted",
-      `stalk-root` == "?" ~ NA_character_,
-      TRUE ~ `stalk-root`
-    ),
-    `stalk-surface-above-ring` = case_when(
-      `stalk-surface-above-ring` == "f" ~ "fibrous",
-      `stalk-surface-above-ring` == "y" ~ "scaly",
-      `stalk-surface-above-ring` == "k" ~ "silky",
-      `stalk-surface-above-ring` == "s" ~ "smooth",
-      `stalk-surface-above-ring` == "?" ~ NA_character_,
-      TRUE ~ `stalk-surface-above-ring`
-    ),
-    `stalk-surface-below-ring` = case_when(
-      `stalk-surface-below-ring` == "f" ~ "fibrous",
-      `stalk-surface-below-ring` == "y" ~ "scaly",
-      `stalk-surface-below-ring` == "k" ~ "silky",
-      `stalk-surface-below-ring` == "s" ~ "smooth",
-      `stalk-surface-below-ring` == "?" ~ NA_character_,
-      TRUE ~ `stalk-surface-below-ring`
-    ),
-    `stalk-color-above-ring` = case_when(
-      `stalk-color-above-ring` == "n" ~ "brown",
-      `stalk-color-above-ring` == "b" ~ "buff",
-      `stalk-color-above-ring` == "c" ~ "cinnamon",
-      `stalk-color-above-ring` == "g" ~ "gray",
-      `stalk-color-above-ring` == "o" ~ "orange",
-      `stalk-color-above-ring` == "p" ~ "pink",
-      `stalk-color-above-ring` == "e" ~ "red",
-      `stalk-color-above-ring` == "w" ~ "white",
-      `stalk-color-above-ring` == "y" ~ "yellow",
-      `stalk-color-above-ring` == "?" ~ NA_character_,
-      TRUE ~ `stalk-color-above-ring`
-    ),
-    `stalk-color-below-ring` = case_when(
-      `stalk-color-below-ring` == "n" ~ "brown",
-      `stalk-color-below-ring` == "b" ~ "buff",
-      `stalk-color-below-ring` == "c" ~ "cinnamon",
-      `stalk-color-below-ring` == "g" ~ "gray",
-      `stalk-color-below-ring` == "o" ~ "orange",
-      `stalk-color-below-ring` == "p" ~ "pink",
-      `stalk-color-below-ring` == "e" ~ "red",
-      `stalk-color-below-ring` == "w" ~ "white",
-      `stalk-color-below-ring` == "y" ~ "yellow",
-      `stalk-color-below-ring` == "?" ~ NA_character_,
-      TRUE ~ `stalk-color-below-ring`
-    ),
-    `veil-type` = case_when(
-      `veil-type` == "p" ~ "partial",
-      `veil-type` == "u" ~ "universal",
-      `veil-type` == "?" ~ NA_character_,
-      TRUE ~ `veil-type`
-    ),
-    `veil-color` = case_when(
-      `veil-color` == "n" ~ "brown",
-      `veil-color` == "o" ~ "orange",
-      `veil-color` == "w" ~ "white",
-      `veil-color` == "y" ~ "yellow",
-      `veil-color` == "?" ~ NA_character_,
-      TRUE ~ `veil-color`
-    ),
-    `ring-number` = case_when(
-      `ring-number` == "n" ~ "none",
-      `ring-number` == "o" ~ "one",
-      `ring-number` == "t" ~ "two",
-      `ring-number` == "?" ~ NA_character_,
-      TRUE ~ `ring-number`
-    ),
-    `ring-type` = case_when(
-      `ring-type` == "c" ~ "cobwebby",
-      `ring-type` == "e" ~ "evanescent",
-      `ring-type` == "f" ~ "flaring",
-      `ring-type` == "l" ~ "large",
-      `ring-type` == "n" ~ "none",
-      `ring-type` == "p" ~ "pendant",
-      `ring-type` == "s" ~ "sheathing",
-      `ring-type` == "z" ~ "zone",
-      `ring-type` == "?" ~ NA_character_,
-      TRUE ~ `ring-type`
-    ),
-    `spore-print-color` = case_when(
-      `spore-print-color` == "k" ~ "black",
-      `spore-print-color` == "n" ~ "brown",
-      `spore-print-color` == "b" ~ "buff",
-      `spore-print-color` == "h" ~ "chocolate",
-      `spore-print-color` == "r" ~ "green",
-      `spore-print-color` == "o" ~ "orange",
-      `spore-print-color` == "u" ~ "purple",
-      `spore-print-color` == "w" ~ "white",
-      `spore-print-color` == "y" ~ "yellow",
-      `spore-print-color` == "?" ~ NA_character_,
-      TRUE ~ `spore-print-color`
-    ),
-    population = case_when(
-      population == "a" ~ "abundant",
-      population == "c" ~ "clustered",
-      population == "n" ~ "numerous",
-      population == "s" ~ "scattered",
-      population == "v" ~ "several",
-      population == "y" ~ "solitary",
-      population == "?" ~ NA_character_,
-      TRUE ~ population
-    ),
-    habitat = case_when(
-      habitat == "g" ~ "grasses",
-      habitat == "l" ~ "leaves",
-      habitat == "m" ~ "meadows",
-      habitat == "p" ~ "paths",
-      habitat == "u" ~ "urban",
-      habitat == "w" ~ "waste",
-      habitat == "d" ~ "woods",
-      habitat == "?" ~ NA_character_,
-      TRUE ~ habitat
-    )
-  )
+```{r}
+#| label: appendix-odor-plot-source
+#| ref.label: fig-odor
+#| eval: false
+```
+
+```{r}
+#| label: appendix-gill-plot-source
+#| ref.label: fig-gill
+#| eval: false
+```
+
+```{r}
+#| label: appendix-bruising-plot-source
+#| ref.label: fig-bruising
+#| eval: false
+```
+
+
+```{r}
+#| label: appendix-spore-plot-source
+#| ref.label: fig-spore
+#| eval: false
+```
+
+### Table creating code:
+```{r}
+#| label: appendix-class-source
+#| ref.label: tbl-class
+#| eval: false
+```
+
+```{r}
+#| label: appendix-odor-table-source
+#| ref.label: tbl-odor
+#| eval: false
+```
+
+```{r}
+#| label: appendix-gill-table-source
+#| ref.label: tbl-gill
+#| eval: false
+```
+
+```{r}
+#| label: appendix-bruising-table-source
+#| ref.label: tbl-bruising
+#| eval: false
+```
+
+```{r}
+#| label: appendix-spore-table-source
+#| ref.label: tbl-spore
+#| eval: false
 ```
