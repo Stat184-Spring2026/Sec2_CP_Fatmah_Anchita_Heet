@@ -16,7 +16,7 @@ In the current project, our goal is to use the method of exploratory data analys
 
 ## Data Provenance:
 
-The data set employed in this study is the Mushroom Data Set, which is also referred to as the Agaricus-Lepiota mushroom data set. This data set consists of hypothetical observations about mushrooms based on information about actual species belonging to the Agaricus and Lepiota families. The data set has a number of features, including those regarding the physical characteristics of the mushrooms like cap shape, cap color, odor, gill type, bruising, habitats, and spore print colors.
+The data set employed in this study is the Mushroom Data Set, which is also referred to as the Agaricus-Lepiota mushroom data set. This data set consists of observations about mushrooms based on information about actual species belonging to the Agaricus and Lepiota families. The data set has a number of features, including those regarding the physical characteristics of the mushrooms like cap shape, cap color, odor, gill type, bruising, habitats, and spore print colors.
 
 This data set is classified according to whether the mushrooms are either edible or poisonous. The data were obtained from descriptions found in field guides, and it has been frequently used in classification and pattern recognition research. This data set is especially suitable for use in the current study since it has numerous categorical features.
 
@@ -34,7 +34,7 @@ This dataset satisfies several FAIR principles:
 
 -   **Interoperable:** Because the data are structured in rows and columns, they can be used across multiple software platforms such as R, Python, and spreadsheet tools.
 
--   **Reusable:** The variables are documented through a Quatro file, allowing future users to understand and reuse the dataset effectively.
+-   **Reusable:** The variables are documented through a Quarto file, allowing future users to understand and reuse the dataset effectively.
 
 ### CARE Principles:
 
@@ -342,7 +342,6 @@ class_table |>
   kable()
 ```
 
-
 ### Odor and Toxicity:
 
 Odor appears to be one of the strongest indicators of mushroom classification. Mushrooms with foul, pungent, or fishy odors are much more likely to be poisonous, while mushrooms with almond, anise, or no odor are more commonly edible. This suggests odor may be one of the most informative observable characteristics in the dataset. Looking at @fig-odor, we can see the proportion of edible and poisonous mushrooms within each odor category.
@@ -389,7 +388,8 @@ ggplot(odor_plot_data, aes(y = odor, x = proportion, fill = classes)) +
     fill = "Class"
   )
 ```
-While @tbl-odor displays the poisonous rate for each odor category so the visual pattern can be connected to exact summary values. We can see that Mushrooms with no odor is the only category that have both edible and poisonous. It is true that the majority of the odorless mushrooms are edible, but we believe that it is safer to use other characteristics to confirm instead of just relying on odor and smell. 
+
+While @tbl-odor displays the poisonous rate for each odor category so the visual pattern can be connected to exact summary values. We can see that Mushrooms with no odor is the only category that have both edible and poisonous. It is true that the majority of the odorless mushrooms are edible, but we believe that it is safer to use other characteristics to confirm instead of just relying on odor and smell.
 
 ```{r}
 #| label: tbl-odor
@@ -588,6 +588,7 @@ ggplot(spore_plot_data, aes(x = count, y = `spore-print-color`, color = classes)
     color = "Class"
   )
 ```
+
 Looking at @tbl-spore, we can see that green spores are the only true indicator that the mushroom is poisonous. all the other spore colors fail to fully indicate if the mushroom is edible or not becuase they overlap with poisonous mushrooms.
 
 ```{r}
@@ -621,24 +622,19 @@ spore_table |>
 
 ## Limitations:
 
-Although this dataset is rich in categorical features, it does not include geographic location, or a time period that could offer additional insight. Also, we are not aware of how representative the 8,124 mushroom samples in the dataset. For example, where they collected from all location or if they were inclusive of all mushrooms.
-Thus, our exploratory analysis and results should be taken with cation, and not to be considered as a safe field guide for mushroom identification, not should it replace expert knowledge or real-world safety procedures.
+Although this dataset has many useful categorical features, it still has some limitations. It does not include geographic location, time period, weather, soil conditions, or detailed biological measurements that could provide more realistic context.
 
-####Limitations
+We also do not know how representative the 8,124 mushroom samples are. For example, it is unclear where the samples were collected, whether they came from many different locations, or whether they include a wide range of mushroom types.
 
-This dataset has many useful categorical features, but it still has some limitations. It does not include location, time period, weather, soil conditions, or detailed biological measurements. These extra details could have helped us understand the mushrooms in a more realistic way.
-
-Also, some of the categories in the dataset are simplified. This means the data may not fully match the complexity of identifying mushrooms in the real world. Because this project is based on exploratory analysis, the results only show patterns and relationships. They do not prove that one feature directly causes a mushroom to be edible or poisonous.
-
-Most importantly, this report should not be used as a field guide for mushroom identification. The dataset is useful for learning and finding patterns, but real mushroom identification should still be done by experts and with proper safety steps.
+Because of this, our exploratory analysis should be interpreted with caution. The results show patterns in the dataset, but they should not be treated as a safe field guide for mushroom identification or as a replacement for expert knowledge and real-world safety procedures.
 
 ## PCIP and Code Quality:
 
 We used the PCIP process throughout the project: planning, coding, improving, and polishing.
 
-In the planning stage, we focused on the mushroom class variable because it tells us whether each mushroom is edible or poisonous. We then chose categorical features that were useful, and easy to connect back to how to distinguish between the edible and poisonous mushrooms. 
+In the planning stage, we focused on the mushroom class variable because it tells us whether each mushroom is edible or poisonous. We then chose categorical features that were useful, and easy to connect back to how to distinguish between the edible and poisonous mushrooms.
 
-In the coding stage, we loaded the data file, renamed variables, decoded the category labels, and created summary tables. This gave is summeriest that are easier to understand and work with. Tasks were divided between us and carried supporter between the team members.
+In the coding stage, we loaded the data file, renamed variables, decoded the category labels, and created summary tables. These summery table provided an easier understanding to the work we have done. Tasks were divided between us and carried separately between the team members.
 
 In the improvement stage, we checked each other work and provided suggestions for each other to improve the final report. We also reused summary objects and revised our tables and plots so the results were easier to read.
 
@@ -656,9 +652,9 @@ In this project, we used exploratory data analysis to better understand how diff
 
 One important takeaway is that one feature by itself is not always enough. Some categories overlap between edible and poisonous mushrooms, so it is safer and more useful to compare multiple features together. This helped us see which traits give stronger evidence when trying to distinguish between edible and poisonous mushrooms.
 
-## Author Contributions
+## Author Contributions"
 
-**Fatmah:** Data import, cleaning, variable recording, documentation review.\
+**Fatmah:** Data import, cleaning, variables recording, documentation review.\
 **Anchita:** Summary statistics, tables, visualizations, pattern analysis.\
 **Heet:** Report writing, data provenance, FAIR/CARE discussion, conclusions, formatting and final review.
 
@@ -672,7 +668,7 @@ Schlimmer, J. (1987). *Mushroom Database*. UCI Machine Learning Repository. Data
 
 \newpage
 
-## Appendix
+## Code Appendix:
 
 ### Dataset cleaning code:
 
@@ -702,7 +698,6 @@ Schlimmer, J. (1987). *Mushroom Database*. UCI Machine Learning Repository. Data
 #| eval: false
 ```
 
-
 ```{r}
 #| label: appendix-spore-plot-source
 #| ref.label: fig-spore
@@ -710,6 +705,7 @@ Schlimmer, J. (1987). *Mushroom Database*. UCI Machine Learning Repository. Data
 ```
 
 ### Table creating code:
+
 ```{r}
 #| label: appendix-class-source
 #| ref.label: tbl-class
